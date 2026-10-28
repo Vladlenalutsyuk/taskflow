@@ -1,0 +1,20 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+title TaskFlow — диаграмма контейнеров
+
+Person(manager, "Руководитель", "Создаёт доски и распределяет задачи")
+Person(executor, "Исполнитель", "Выполняет задачи и учитывает время")
+
+System_Boundary(taskflow, "TaskFlow") {
+    Container(web, "Веб-клиент", "React", "Показывает доски, задачи и формы")
+    Container(api, "Сервер приложения", "Node.js / Express", "Обрабатывает запросы и проверяет права")
+    ContainerDb(db, "База данных", "PostgreSQL", "Хранит пользователей, доски, задачи и записи времени")
+}
+
+Rel(manager, web, "Использует", "HTTPS")
+Rel(executor, web, "Использует", "HTTPS")
+Rel(web, api, "Отправляет запросы", "REST API / HTTPS / JSON")
+Rel(api, db, "Читает и сохраняет данные", "SQL / PostgreSQL")
+
+@enduml
