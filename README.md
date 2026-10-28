@@ -31,4 +31,4 @@ TaskFlow — система для организации командной р�
 ## Документация
 
 Описание архитектуры и базы данных находится
-в файле [ARCHITECTURE.md](ARCHITECTURE.md).
+в файле [ARCHITECTURE.md](docs/ARCHITECTURE.md)
