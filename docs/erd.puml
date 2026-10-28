@@ -1,0 +1,91 @@
+@startuml
+title TaskFlow — схема базы данных
+
+hide circle
+skinparam linetype ortho
+
+entity users {
+  * id : BIGINT <<PK>>
+  --
+  * name : VARCHAR(100)
+  * email : VARCHAR(255) <<UNIQUE>>
+  * password_hash : TEXT
+  * created_at : TIMESTAMPTZ
+}
+
+entity boards {
+  * id : BIGINT <<PK>>
+  --
+  * name : VARCHAR(150)
+  description : TEXT
+  * created_at : TIMESTAMPTZ
+}
+
+entity board_members {
+  * id : BIGINT <<PK>>
+  --
+  * board_id : BIGINT <<FK>>
+  * user_id : BIGINT <<FK>>
+  * role : VARCHAR(20)
+}
+
+entity statuses {
+  * id : BIGINT <<PK>>
+  --
+  * board_id : BIGINT <<FK>>
+  * name : VARCHAR(50)
+  * position : INTEGER
+}
+
+entity tasks {
+  * id : BIGINT <<PK>>
+  --
+  * status_id : BIGINT <<FK>>
+  assignee_id : BIGINT <<FK>>
+  * title : VARCHAR(200)
+  description : TEXT
+  due_at : TIMESTAMPTZ
+  * created_at : TIMESTAMPTZ
+}
+
+entity time_entries {
+  * id : BIGINT <<PK>>
+  --
+  * task_id : BIGINT <<FK>>
+  * user_id : BIGINT <<FK>>
+  * minutes : INTEGER
+  comment : TEXT
+  * created_at : TIMESTAMPTZ
+}
+
+users ||--o{ board_members : участвует
+boards ||--|{ board_members : включает
+boards ||--|{ statuses : содержит
+statuses ||--o{ tasks : объединяет
+users |o--o{ tasks : выполняет
+tasks ||--o{ time_entries : имеет
+users ||--o{ time_entries : записывает
+
+note bottom of board_members
+  UNIQUE (board_id, user_id)
+  role: manager или executor
+end note
+
+note bottom of statuses
+  UNIQUE (board_id, name)
+  UNIQUE (board_id, position)
+  position >= 0
+end note
+
+note bottom of time_entries
+  minutes > 0
+end note
+
+legend bottom
+  PK — первичный ключ
+  FK — внешний ключ
+  * — обязательное поле (NOT NULL)
+  Доска задачи определяется через её статус.
+endlegend
+
+@enduml
