@@ -171,6 +171,12 @@ tasks.status_id → statuses.board_id.
 - tasks и time_entries: связь 1:N.
 - users и time_entries: связь 1:N.
 
+### ER-диаграмма
+
+![Схема базы данных TaskFlow](erd.png)
+
+Исходник: [erd.puml](erd.puml).
+
 ## 6. Нормализация
 
 Схема спроектирована в третьей нормальной форме (3НФ):
